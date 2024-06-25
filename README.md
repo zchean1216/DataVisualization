@@ -21,9 +21,14 @@ The project utilizes the 2023 OECD Health Statistics and VizHub - GBD Results.
     - Use a local server setup or the live server extension in VS Code to preview the visualisation.
 
 ## File Structure
-- **index.html**: Main HTML file.
-- **style.css**: CSS file for styling.
-- **script.js**: JavaScript file for data visualisation using D3.js.
+- **index.html**: Main landing page.
+- **visualisation1.html**: Descriptive data visualisation.
+- **visualisation2.html**: Prevalence by region visualisation.
+- **resources.html**: Datasets and resources page.
+- **assets**: Folder containing images, CSS, and JavaScript files.
+  - **css**: Stylesheets.
+  - **img**: Images used in the project.
+  - **js**: JavaScript files for D3 visualisation.
 
 ## Contact
 For questions or feedback, contact:
