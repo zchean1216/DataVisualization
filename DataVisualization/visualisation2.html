@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="description" content="COS30045 Assignment 2 Visualisation2 Page" />
+   <meta name="keywords" content="Data Visualisation Assignment 2" />
+   <meta name="author" content="Zheng Chean Chia, Almyra Cyrena Zahra" />
+
+   <!-- Favicon -->
+   <link rel="shortcut icon" href="assets/img/icon.png" type="image/x-icon">
+   <!-- Remix Icons for various UI elements -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
+   <!-- Main CSS stylesheet -->
+   <link rel="stylesheet" href="assets/css/styles.css">
+   <title>Prevalence by Region</title>
+</head>
+<style>
+     /* Styling for the main headings */
+     h1 {
+         font-size: 24px; 
+         font-weight: bold;
+         color: black;
+         margin-top: 120px;
+         text-align: center;
+     }
+     /* Styling for the subtitle */
+     h2 {
+         font-size: 14px; 
+         margin-top: 20px;
+         font-style: italic;
+         color: grey;
+         text-align: center;
+     }
+     /* Styling for the directory path in the treemap */
+     .directory-path tspan {
+         font-size: 20px; 
+         font-weight: bold;
+     }
+     /* Styling for treemap labels */
+     .treemap-label {
+         font-size: 14px; 
+         font-weight: bold;
+     }
+     /* Styling for treemap values */
+     .treemap-value {
+         font-size: 14px;
+         font-style: italic;
+     }
+     /* Styling for the treemap container */
+     #treemapcontainer {
+         margin: 20px;
+         width: auto;
+     }
+</style>
+<body>
+   <!-- Header section with navigation menu -->
+   <header class="header" id="header">
+      <nav class="nav container">
+         <a href="#" class="nav__logo">Mental and Behavioural <br> Factors of Mortality</a>
+         <div class="nav__menu" id="nav-menu">
+            <ul class="nav__list">
+               <li>
+                  <a href="index.html" class="nav__link">Home</a>
+               </li>
+               <li>
+                  <a href="visualisation1.html" class="nav__link">Descriptives</a>
+               </li>
+               <li>
+                  <a href="visualisation2.html" class="nav__link">Prevalence by Region</a>
+               </li>
+               <li>
+                  <a href="resources.html" class="nav__link">Datasets</a>
+               </li>
+            </ul>
+            <!-- Close button for mobile menu -->
+            <div class="nav__close" id="nav-close">
+               <i class="ri-close-large-line"></i>
+            </div>
+         </div>
+         <!-- Toggle button for mobile menu -->
+         <div class="nav__toggle" id="nav-toggle">
+            <i class="ri-apps-2-line"></i>
+         </div>
+      </nav>
+   </header>
+   <!-- Main content area -->
+   <main>
+      <!-- Title and subtitle for the page -->
+      <h1>Prevalence of Mental or Behavioural Factors<br> Affecting Mortality by Region</h1>
+      <h2>Note: 'Rate' is used to standardise data by population size</h2>
+      <!-- Container for the treemap visualisation -->
+      <div id="treemapcontainer">
+         <div id="treemap"></div>
+      </div>
+   </main>
+   <!-- D3.js library for data visualisation -->
+   <script src="https://d3js.org/d3.v7.min.js"></script>
+   <!-- Visualisation specific JS file with cache busting query parameter -->
+   <script src="assets/js/main3.js?timestamp=<?php echo time(); ?>" type="module"></script>
+</body>
+</html>

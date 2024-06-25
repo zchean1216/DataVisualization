@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="COS30045 Assignment 2 Visualisation2 Page" />
+    <meta name="keywords" content="Data Visualisation Assignment 2" />
+    <meta name="author" content="Zheng Chean Chia, Almyra Cyrena Zahra" />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/img/icon.png" type="image/x-icon">
+    <!-- Remix Icons for various UI elements -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
+    <!-- Main CSS stylesheet -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <title>Descriptives</title>
+    <!-- D3.js library for data visualisation -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+   </head>
+   <style>
+        h1 { /* Styling for main headings */
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            margin-top: 120px;
+            text-align: center;
+        }
+        h2 { /* Styling for subheadings */
+            font-size: 14px; 
+            margin-top: 20px;
+            font-style: italic;
+            color: grey;
+            text-align: center;
+        }
+        .barchart { /* Styling for bar chart container */
+            display: flex;
+            margin: 15px 0;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+      
+        .tooltip {  /* General styling for tooltip */
+            position: absolute;
+            text-align: left;
+            width: 220px; 
+            padding: 10px;
+            font: 16px sans-serif;
+            background: #000;
+            color: #fff;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+        .tooltip .country-name { /* Styling for country name within tooltip */
+            font-size: 32px;
+        }
+        .tooltip .tooltip-row { /* Styling for rows within tooltip */
+            display: flex;
+            justify-content: space-between;
+        }
+        .tooltip-label { /* Styling for labels within tooltip */
+            font-weight: bold;
+        }
+        .tooltip-value { /* Styling for values within tooltip */
+            margin-left: 10px;
+        }
+   </style>
+   <body>
+    <!-- Header section with navigation menu -->
+    <header class="header" id="header">
+        <nav class="nav container">
+            <a href="#" class="nav__logo">Mental and Behavioural <br> Factors of Mortality</a>
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li>
+                    <a href="index.html" class="nav__link">Home</a>
+                    </li>
+                    <li>
+                    <a href="visualisation1.html" class="nav__link">Descriptives</a>
+                    </li>
+                    <li>
+                    <a href="visualisation2.html" class="nav__link">Prevalence by Region</a>
+                    </li>
+                    <li>
+                    <a href="resources.html" class="nav__link">Datasets</a>
+                    </li>
+                </ul>
+
+                <!-- Close button for mobile menu -->
+                <div class="nav__close" id="nav-close">
+                    <i class="ri-close-large-line"></i>
+            </div>
+            <!-- Toggle button for mobile menu -->
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="ri-apps-2-line"></i>
+            </div>
+        </nav>
+        </header>
+        <!-- Main content area -->
+        <main>
+            <!-- Title and subtitle for the page -->
+            <h1>Descriptives for Mental and Behavioural Factors<br>
+                Affecting Mortality by Region and Gender</h1>
+            <h2>Note: Rate per 100,000 population is used to standardise data,<br>
+                average rate per 100,000 population per gender between 2015-2019 is used to standardise data.</h2>
+            <!-- Visualisation section starts here -->
+            <div class="barchart">
+                <!-- SVG canvas setup -->
+                <svg width="960" height="960" font-family="sans-serif"></svg>
+            </div>
+            <script>
+                // Dictionary to map country codes to full country names
+                var countryNames = {
+                    "AUS": "Australia",
+                    "AUT": "Austria",
+                    "BEL": "Belgium",
+                    "CAN": "Canada",
+                    "CHL": "Chile",
+                    "COL": "Colombia",
+                    "CRI": "Costa Rica",
+                    "CZE": "Czech Republic",
+                    "DNK": "Denmark",
+                    "EST": "Estonia",
+                    "FIN": "Finland",
+                    "FRA": "France",
+                    "GER": "Germany",
+                    "GRC": "Greece",
+                    "HUN": "Hungary",
+                    "ISL": "Iceland",
+                    "IRL": "Ireland",
+                    "ISR": "Israel",
+                    "ITA": "Italy",
+                    "JPN": "Japan",
+                    "KOR": "South Korea",
+                    "LVA": "Latvia",
+                    "LTU": "Lithuania",
+                    "LUX": "Luxembourg",
+                    "MEX": "Mexico",
+                    "NLD": "Netherlands",
+                    "NZL": "New Zealand",
+                    "NOR": "Norway",
+                    "POL": "Poland",
+                    "PRT": "Portugal",
+                    "SVK": "Slovakia",
+                    "SVN": "Slovenia",
+                    "ESP": "Spain",
+                    "SWE": "Sweden",
+                    "CHE": "Switzerland",
+                    "TUR": "Turkey",
+                    "GBR": "United Kingdom",
+                    "USA": "United States",
+                    "ARG": "Argentina",
+                    "BRA": "Brazil",
+                    "BGR": "Bulgaria",
+                    "HRV": "Croatia",
+                    "PER": "Peru",
+                    "ROU": "Romania",
+                    "RUS": "Russia",
+                    "ZAF": "South Africa"
+                };
+            
+                // Select the SVG element
+                var svg = d3.select("svg"),
+                    width = +svg.attr("width"),
+                    height = +svg.attr("height"),
+                    innerRadius = 200,
+                    outerRadius = Math.min(width, height) / 2 - 20,
+                    g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+                
+                // Create a scale for the x-axis using a band scale
+                var x = d3.scaleBand()
+                    .range([0, 2 * Math.PI])
+                    .align(0);
+                
+                // Create a radial scale for the y-axis
+                var y = d3.scaleRadial()
+                    .range([innerRadius, outerRadius]);
+                
+                // Create an ordinal scale for the color scheme
+                var z = d3.scaleOrdinal()
+                    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"]);
+                
+                    // Append a tooltip div to the body with an initial opacity of 0
+                var tooltip = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("opacity", 0);
+                
+                // Load the data from a CSV file with semicolon as the delimiter
+                d3.dsv(";", "data.csv").then(function(data) {
+                    data.forEach(function(d) {
+                        let t = 0;
+                        // Convert string values to numbers and calculate the total for each row
+                        for (let i = 1; i <= 5; ++i) {
+                            t += d[data.columns[i]] = +d[data.columns[i]];
+                        }
+                        d.total = t;
+
+                    // Calculate the cumulative rate for the last five years
+                    d.cumulativeRate = d[data.columns[1]] + d[data.columns[2]] + d[data.columns[3]] + d[data.columns[4]] + d[data.columns[5]];
+                });
+            
+                // Set the domain for the x-axis scale using the 'Country' field
+                x.domain(data.map(function(d) { 
+                    return d.Country; 
+                }));
+                // Set the domain for the y-axis scale using the maximum 'total' value
+                y.domain([0, d3.max(data, function(d) { 
+                    return d.total; 
+                })]);
+                // Set the domain for the color scale using the first five data columns
+                z.domain(data.columns.slice(1, 6));
+        
+                    // Append a group element to 'g'
+                g.append("g")
+                    .selectAll("g")
+                    // Bind the stacked data to group elements
+                    .data(d3.stack().keys(data.columns.slice(1, 6))(data))
+                    .enter().append("g")
+                    .attr("fill", function(d) { 
+                        return z(d.key); 
+                    })
+                    .selectAll("path")
+                    // Bind the data to path elements within each group
+                    .data(function(d) { 
+                        return d; 
+                    })
+                    .enter().append("path")
+                    // Define the d attribute for the path using the arc generator
+                    .attr("d", d3.arc()
+                        .innerRadius(function(d) { 
+                            return y(d[0]); 
+                        })
+                        .outerRadius(function(d) { 
+                            return y(d[1]); 
+                        })
+                        .startAngle(function(d) { 
+                            return x(d.data.Country); 
+                        })
+                        .endAngle(function(d) { 
+                            return x(d.data.Country) + x.bandwidth(); 
+                        })
+                        .padAngle(0.01)
+                        .padRadius(innerRadius))
+                    // Add an event listener for mouseover  
+                    .on("mouseover", function(event, d) {
+                        let yearIndex = d3.select(this.parentNode).datum().key;
+                        let year = yearIndex.replace(";", "");
+                        // Transition the tooltip to be visible
+                        tooltip.transition()
+                            .duration(200)
+                            .style("opacity", .9);
+                        // Set the content and position of the tooltip
+                        tooltip.html("<strong class='country-name'>" + countryNames[d.data.Country] + "</strong><br>" +
+                                    "<div class='tooltip-row'><span class='tooltip-label'>Value:</span><span class='tooltip-value'>" + (d[1] - d[0]).toFixed(2) + "</span></div>" +
+                                    "<div class='tooltip-row'><span class='tooltip-label'>Male:</span><span class='tooltip-value'>" + d.data["M" + year] + "</span></div>" +
+                                    "<div class='tooltip-row'><span class='tooltip-label'>Female:</span><span class='tooltip-value'>" + d.data["F" + year] + "</span></div>" +
+                                    "<div class='tooltip-row'><span class='tooltip-label'>5-Year Total:</span><span class='tooltip-value'>" + d.data.cumulativeRate.toFixed(2) + "</span></div>")
+                            .style("left", (event.pageX + 10) + "px")  
+                            .style("top", (event.pageY - 40) + "px");
+                        // Bring the element to the front by re-appending it to the parent group
+                        this.parentNode.appendChild(this);
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr("d", d3.arc()
+                                .innerRadius(function(d) { return y(d[0]) * 0.97; })  
+                                .outerRadius(function(d) { return y(d[1]) * 1.03; })  
+                                .startAngle(function(d) { return x(d.data.Country); })
+                                .endAngle(function(d) { return x(d.data.Country) + x.bandwidth(); })
+                                .padAngle(0.01)
+                                .padRadius(innerRadius))
+                            .style("stroke", "black")
+                            .style("stroke-width", "1px");  
+                    })
+                    .on("mousemove", function(event) {
+                        // Update the tooltip position based on the mouse movement
+                        tooltip.style("left", (event.pageX + 45) + "px")  
+                            .style("top", (event.pageY - 40) + "px");  
+                    })
+                    .on("mouseout", function(d) {
+                        // Transition the tooltip to be invisible
+                        tooltip.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                        // Transition the element back to its original state
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr("d", d3.arc()
+                                .innerRadius(function(d) { return y(d[0]); }) // Restore the original inner radius
+                                .outerRadius(function(d) { return y(d[1]); }) // Restore the original outer radius
+                                .startAngle(function(d) { return x(d.data.Country); })
+                                .endAngle(function(d) { return x(d.data.Country) + x.bandwidth(); })
+                                .padAngle(0.01)
+                                .padRadius(innerRadius))
+                            .style("stroke", "none");
+                    });
+
+                    // Append a group element to 'g' for the labels
+                    var label = g.append("g")
+                        .selectAll("g")
+                        .data(data)
+                        .enter().append("g")
+                        .attr("text-anchor", "middle")
+                        .attr("transform", function(d) { 
+                            return "rotate(" + ((x(d.Country) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")translate(" + (innerRadius - 1) + ",0)"; 
+                        });
+                    
+                    // Append lines for each label
+                    label.append("line")
+                        .attr("x2", -5)
+                        .attr("stroke", "#000");
+                        
+                    // Append text for each label
+                    label.append("text")
+                        .attr("transform", function(d) {
+                            var angle = (x(d.Country) + x.bandwidth() / 2) * 180 / Math.PI - 90;
+                            return angle < 90 && angle > -90 ? "rotate(0)translate(-25,4)" : "rotate(180)translate(25,4)"; 
+                        })
+                        .style("font-size", "14px")
+                        .text(function(d) { 
+                            return d.Country; 
+                        });
+            
+                    // Append a group element to 'g' for the y-axis
+                    var yAxis = g.append("g")
+                        .attr("text-anchor", "middle");
+                    
+                    // Append group elements for each y-tick
+                    var yTick = yAxis
+                        .selectAll("g")
+                        .data(y.ticks(5).slice(1))
+                        .enter().append("g");
+                    
+                    // Append circles for each y-tick
+                    yTick.append("circle")
+                        .attr("fill", "none")
+                        .attr("stroke", "#000")
+                        .attr("r", y);
+                    
+                    // Append text for each y-tick with background stroke
+                    yTick.append("text")
+                        .attr("y", function(d) { 
+                            return -y(d); 
+                        })
+                        .attr("dy", "0.35em")
+                        .attr("fill", "none")
+                        .attr("stroke", "#fff")
+                        .attr("stroke-width", 5)
+                        .style("font-size", "16px")
+                        .text(y.tickFormat(5, "s"));
+            
+                    // Append text for each y-tick
+                    yTick.append("text")
+                        .attr("y", function(d) { 
+                            return -y(d); 
+                        })
+                        .attr("dy", "0.35em")
+                        .style("font-size", "16px")
+                        .text(y.tickFormat(5, "s"));
+                    
+                    // Append a group element to 'g' for the legend
+                    var legend = g.append("g")
+                        .attr("transform", "translate(0,90)")
+                        .selectAll("g")
+                        .data(data.columns.slice(1, 6).reverse())
+                        .enter().append("g")
+                        .attr("transform", function(d, i) {
+                            return "translate(0," + ((i - (data.columns.length - 1) / 2) * 20) + ")";
+                        });
+
+                    // Append rectangles for the legend
+                    legend.append("rect")
+                        .attr("x", -20)
+                        .attr("width", 20)
+                        .attr("height", 20)
+                        .attr("fill", z);
+
+                    // Append text for the legend
+                    legend.append("text")
+                        .attr("x", 5)
+                        .attr("y", 9)
+                        .attr("dy", "0.35em")
+                        .style("font-size", "16px")
+                        .text(function(d) { return d; });
+                });
+            </script>
+            <!-- End of visualisation section -->            
+        </main>
+   </body>
+</html>

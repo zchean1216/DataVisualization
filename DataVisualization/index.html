@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="description" content="COS30045 Assignment 2 Landing Page" />
+   <meta name="keywords" content="Data Visualisation Assignment 2" />
+   <meta name="author" content="Zheng Chean Chia, Almyra Cyrena Zahra" />
+
+   <!-- Favicon -->
+   <link rel="shortcut icon" href="assets/img/icon.png" type="image/x-icon">
+   <!-- Remix Icons for various UI elements -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
+   <!-- Swiper CSS for carousel/slider functionality -->
+   <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
+   <!-- Main CSS stylesheet -->
+   <link rel="stylesheet" href="assets/css/styles.css">
+   <title>Mental and Behavioural Factors of Mortality</title>
+</head>
+<body>
+   <!-- Header section with navigation menu -->
+   <header class="header" id="header">
+      <nav class="nav container">
+         <a href="#" class="nav__logo">Mental and Behavioural <br>Factors of Mortality</a>
+         <div class="nav__menu" id="nav-menu">
+            <ul class="nav__list">
+               <li>
+                  <a href="index.html" class="nav__link">Home</a>
+               </li>
+               <li>
+                  <a href="visualisation1.html" class="nav__link">Descriptives</a>
+               </li>
+               <li>
+                  <a href="visualisation2.html" class="nav__link">Prevalence by Region</a>
+               </li>
+               <li>
+                  <a href="resources.html" class="nav__link">Datasets</a>
+               </li>
+            </ul>
+            <!-- Close button for mobile menu -->
+            <div class="nav__close" id="nav-close">
+               <i class="ri-close-large-line"></i>
+            </div>
+         </div>
+         <!-- Toggle button for mobile menu -->
+         <div class="nav__toggle" id="nav-toggle">
+            <i class="ri-apps-2-line"></i>
+         </div>
+      </nav>
+   </header>
+
+   <!-- Main content area -->
+   <main class="main">
+      <!-- Home section with introductory content -->
+      <section class="home">
+         <div class="home__container">
+            <div class="home__data">
+               <h3 class="home__subtitle">EXPLORE THE TRENDS</h3>
+
+               <!-- Swiper for rotating titles -->
+               <div thumbsSlider="" class="home__titles swiper">
+                  <div class="swiper-wrapper">
+                     <div class="swiper-slide">
+                        <h1 class="home__title">
+                           Explore <br> Descriptives Data
+                        </h1>
+                     </div>
+
+                     <div class="swiper-slide">
+                        <h1 class="home__title">
+                           Explore Prevalence <br> by Region
+                        </h1>
+                     </div>
+
+                     <div class="swiper-slide">
+                        <h1 class="home__title">
+                           Explore <br> Data Resources 
+                        </h1>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Swiper for rotating images -->
+            <div class="home__images">
+               <div class="home__swiper swiper">
+                  <div class="swiper-wrapper">
+                     <article class="home__article swiper-slide">
+                        <div class="home__card">
+                           <div class="home__circle home__circle-1">
+                              <img src="assets/img/rad.png" alt="Rad Image" class="home__circle-img">
+                           </div>
+                        </div>
+                     </article>
+
+                     <article class="home__article swiper-slide">
+                        <div class="home__card">
+                           <div class="home__circle home__circle-2">
+                              <img src="assets/img/treemap.png" alt="Treemap Image" class="home__circle-img">
+                           </div>
+                        </div>
+                     </article>
+
+                     <article class="home__article swiper-slide">
+                        <div class="home__card">
+                           <div class="home__circle home__circle-3">
+                              <img src="assets/img/data.png" alt="Data Image" class="home__circle-img">
+                           </div>
+                        </div>
+                     </article>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Footer section within the home section for navigation controls -->
+            <footer class="home__footer">
+               <div class="home__controls">
+                  <!-- Pagination for swiper -->
+                  <div class="swiper-pagination"></div>
+                  <div class="home__navigation">
+                     <!-- Navigation buttons for swiper -->
+                     <div class="swiper-button-prev">
+                        <i class="ri-arrow-left-line"></i>
+                     </div>
+                     <div class="swiper-button-next">
+                        <i class="ri-arrow-right-line"></i>
+                     </div>
+                  </div>
+               </div>
+            </footer>
+         </div>
+      </section>
+   </main>
+
+   <!-- Footer section with author information -->
+   <footer class="footer">
+      <div class="footer__container container">
+         <div class="footer__left">
+            COS30045 Data Visualization
+         </div>
+         <div class="footer__right">
+            Almyra Zahra & Zheng Chean Chia
+         </div>
+      </div>
+   </footer>
+   <!-- Swiper JS for carousel/slider functionality -->
+   <script src="assets/js/swiper-bundle.min.js"></script>
+   <!-- Main JS file -->
+   <script src="assets/js/main.js"></script>
+</body>
+</html>
